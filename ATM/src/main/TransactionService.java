@@ -1,12 +1,12 @@
 package main;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.IOException;// 用于处理输入输出操作中可能出现的异常
+import java.io.PrintWriter;// 用于将文本内容写入文件
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.stream.Stream;
+import java.util.stream.Stream;// 用于使用 Java Stream API 进行数据处理
 
 // 交易记录服务类，提供打印交易历史记录并导出为 CSV 文件的功能
 public class TransactionService {

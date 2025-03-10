@@ -189,7 +189,7 @@ public class ATMSystem {
 
     // 打印流水账单方法
     private static void printTransactionHistory(Scanner scanner) {
-        System.out.print("请输入要保存的文件路径（例如: C:\\transactions.csv）: ");
+        System.out.print("请输入要保存的文件路径（例如: /Users/hj/Desktop/transactions.csv）: ");
         String filePath = scanner.nextLine();
         // 调用交易记录服务类的打印交易历史记录方法
         transactionService.printTransactionHistory(currentUser.getId(), filePath);

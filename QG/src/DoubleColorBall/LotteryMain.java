@@ -54,17 +54,14 @@ public class LotteryMain {
                 boolean blueValid = false;
                 while (!blueValid) {
                     System.out.println("请输入蓝球号码：");
-                    try {
-                        userBlueNumber = scanner.nextInt();
-                        if (userBlueNumber < 1 || userBlueNumber > 16) {
-                            System.out.println("蓝球号码必须在1到16之间，请重新输入。");
-                        } else {
-                            blueValid = true;
-                        }
-                    } catch (Exception e) {
-                        System.out.println("输入的蓝球号码格式不正确，请重新输入。");
-                        scanner.nextLine(); // 清除无效输入
+                    userBlueNumber = scanner.nextInt();
+                    if (userBlueNumber < 1 || userBlueNumber > 16) {
+                        System.out.println("蓝球号码必须在1到16之间，请重新输入。");
+                    } else {
+                        blueValid = true;
                     }
+                    System.out.println("输入的蓝球号码格式不正确，请重新输入。");
+                    scanner.nextLine(); // 清除无效输入
                 }
 
                 LotteryResultChecker checker = new LotteryResultChecker();

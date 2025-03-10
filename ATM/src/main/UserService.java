@@ -1,11 +1,11 @@
 package main;
 
-import java.math.BigDecimal;
+import java.math.BigDecimal;// 用于精确的十进制运算，避免浮点数运算带来的精度问题。
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.regex.Pattern;
+import java.util.regex.Pattern;// 用于创建正则表达式模式，以验证输入的格式。
 
 // 用户服务类，提供用户注册、登录、存款、取款、转账等功能的业务逻辑
 public class UserService {
@@ -27,9 +27,10 @@ public class UserService {
         }
         // 插入用户信息的 SQL 语句
         String sql = "INSERT INTO users (name, phone_number, id_card_number, bank_card_number, balance, password) VALUES (?,?,?,?,?,?)";
+        // 使用 try-with-resources 语句创建数据库连接和预编译的 SQL 语句对象，确保资源在使用后自动关闭。
         try (Connection conn = MysqlConnection.getConnection();
              // 创建预编译的 SQL 语句对象
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {//在 try 关键字后面的括号中声明需要管理的资源
             // 设置 SQL 语句中的参数
             pstmt.setString(1, name);
             pstmt.setString(2, phoneNumber);
@@ -43,7 +44,7 @@ public class UserService {
             // 如果受影响的行数大于 0，表示注册成功
             return rows > 0;
         } catch (SQLException e) {
-            // 打印异常信息
+            // 捕获可能出现的 SQL 异常，打印异常信息并返回 false
             e.printStackTrace();
             return false;
         }
@@ -51,7 +52,7 @@ public class UserService {
 
     // 用户登录方法
     public User login(String idCardNumber, String password) {
-        // 查询用户信息的 SQL 语句
+        // 查询用户信息的 SQL 语句，从 users 表中查询与输入的身份证号码和密码匹配的用户信息。
         String sql = "SELECT * FROM users WHERE id_card_number = ? AND password = ?";
         try (Connection conn = MysqlConnection.getConnection();
              // 创建预编译的 SQL 语句对象
@@ -61,7 +62,7 @@ public class UserService {
             pstmt.setString(2, password);
             // 执行查询并获取结果集
             ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
+            if (rs.next()) {// 判断结果集中是否有下一行记录，如果有，则表示登录成功
                 // 从结果集中获取用户信息
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
@@ -147,7 +148,7 @@ public class UserService {
             return false;
         }
         try (Connection conn = MysqlConnection.getConnection()) {
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false);// 手动开启事务
             try {
                 // 先更新转账用户的余额
                 String sql1 = "UPDATE users SET balance = balance - ? WHERE id = ?";
@@ -166,7 +167,7 @@ public class UserService {
                 // 记录转账交易信息
                 recordTransaction(userId, "Transfer", amount, targetBankCardNumber);
                 recordTransaction(targetUser.getId(), "Receive", amount, user.getBankCardNumber());
-                conn.commit();
+                conn.commit();// 提交事务
                 return true;
             } catch (SQLException e) {
                 conn.rollback();
